@@ -1,2 +1,6 @@
-# PrejetoFocus2k
-Site de manipulação de tarefas na ténica kanban, junto ira ter sistema pomodoro para a solução de tarefas e inserção de texto por voz, IA integrada ira sugerir tarefas e prioridades de cada um
+# Projeto `Focus2k`
+
+Site de manipulação de tarefas na técnica `kanban`, junto ira ter sistema pomodoro para a solução de tarefas e inserção de tarefas por voz, `LLM` integrada ira sugerir tarefas e prioridades
+
+Projeto integrador do `programa Jovem Programador` do instituto `Senac Palhoça`
+> Grupo: Allan Tavares, Naielly Tavares, Juan Camilo, Raiane Rosar
