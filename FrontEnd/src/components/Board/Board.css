@@ -1,0 +1,14 @@
+.add-column-btn {
+  background: #eee;
+  
+  color: #18181b;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.add-column-btn:hover {
+  background: #d6d6d6;
+  transform: scale(1.005);
+}
