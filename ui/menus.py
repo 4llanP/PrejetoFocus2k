@@ -13,7 +13,6 @@ def criar_usuario_menu(dados: dict):
         input("\nNome já existente. Pressione Enter.")
         return
     senha = input("Informe sua senha: ")
-    print(senha)
 
     print("\n--- Preferências de Comunicação ---")
     print("1. Passo a passo curto e direto (Recomendado para TPAC)")
