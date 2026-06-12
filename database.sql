@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS usuarios;
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
     estilo_instrucao ENUM('direto', 'detalhado') NOT NULL DEFAULT 'direto',
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -34,13 +35,15 @@ CREATE TABLE tarefas (
     usuario_id INT NOT NULL,
     tipo ENUM('tarefas_diarias', 'tarefas_educacionais') NOT NULL,
     titulo VARCHAR(200) NOT NULL,
+    descricao TEXT NULL,
+    prioridade ENUM('baixa', 'media', 'alta') NOT NULL DEFAULT 'media',
+    prazo DATE NULL,
     concluida BOOLEAN NOT NULL DEFAULT FALSE,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
     CONSTRAINT fk_tarefas_usuario
-        FOREIGN KEY (usuario_id)
-        REFERENCES usuarios(id)
-        ON DELETE CASCADE
+    FOREIGN KEY (usuario_id)
+    REFERENCES usuarios(id)
+    ON DELETE CASCADE
 );
 
 -- ============================================================
@@ -61,15 +64,12 @@ CREATE TABLE passos (
 );
 
 -- ============================================================
--- DADOS DE EXEMPLO
--- Pode apagar esta parte depois que testar.
+-- Popular dados
 -- ============================================================
-INSERT INTO usuarios (nome, estilo_instrucao)
-VALUES ('Matheus', 'direto');
+INSERT INTO usuarios (nome,senha, estilo_instrucao)
+VALUES ('Aluno Exemplo', '1234', 'direto');
+INSERT INTO tarefas (usuario_id, tipo, titulo, descricao, prioridade, prazo, concluida)
+VALUES (1, 'tarefas_diarias', 'Organizar mochila', 'Separar material por disciplina antes da aula.', 'media', '2026-06-10', FALSE),
+(1, 'tarefas_educacionais', 'Revisar lógica de programação', 'Rever variáveis, condições e repetição.', 'alta', '2026-06-12', FALSE);
 
-INSERT INTO tarefas (usuario_id, tipo, titulo, concluida)
-VALUES (1, 'tarefas_diarias', 'Arrumar a Casa', FALSE);
 
--- criar tabela senha
-ALTER TABLE usuarios
-ADD COLUMN senha VARCHAR(255) NOT NULL;

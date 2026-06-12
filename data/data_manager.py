@@ -58,16 +58,21 @@ def carregar_dados() -> Dict[str, Any]:
         }
 
         cursor.execute("""
-            SELECT id, titulo, concluida, tipo
+            SELECT id, titulo, descricao, prioridade, prazo, concluida, tipo
             FROM tarefas
             WHERE usuario_id = %s
             ORDER BY id
         """, (usuario["id"],))
         tarefas = cursor.fetchall()
 
+
         for tarefa in tarefas:
+            prazo = tarefa["prazo"].strftime("%Y-%m-%d") if tarefa["prazo"] else ""
             tarefa_dict = {
                 "titulo": tarefa["titulo"],
+                "descricao": tarefa["descricao"],
+                "prioridade": tarefa["prioridade"],
+                "prazo": prazo,
                 "concluida": bool(tarefa["concluida"]),
                 "passos": []
             }
@@ -129,12 +134,15 @@ def salvar_dados(dados: Dict[str, Any]) -> None:
             for tipo in ["tarefas_diarias", "tarefas_educacionais"]:
                 for tarefa in info_usuario.get(tipo, []):
                     cursor.execute("""
-                        INSERT INTO tarefas (usuario_id, tipo, titulo, concluida)
-                        VALUES (%s, %s, %s, %s)
+                        INSERT INTO tarefas (usuario_id, tipo, titulo, descricao, prioridade, prazo, concluida)
+                        VALUES (%s, %s, %s, %s, %s, NULLIF(%s, ''), %s)
                     """, (
                         usuario_id,
                         tipo,
                         tarefa.get("titulo", ""),
+                        tarefa.get("descricao", ""),
+                        tarefa.get("prioridade", "media"),
+                        tarefa.get("prazo", ""),
                         bool(tarefa.get("concluida", False))
                     ))
 

@@ -18,7 +18,7 @@ def executar_sistema():
         exibir_cabecalho("Focus 2k")
 
         print("1. Entrar com perfil existente")
-        print("2. Criar novo perfil customizado")
+        print("2. Criar novo perfil de estudante")
         print("3. Encerrar")
 
         opcao = input("\nEscolha uma opção: ").strip()
@@ -48,7 +48,7 @@ def executar_sistema():
             criar_usuario_menu(dados)
 
         elif opcao == "3":
-            print("\nAté logo!")
+            print("\nAté logo! Bons estudos!")
             break
 
 
