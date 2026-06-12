@@ -15,7 +15,7 @@ def criar_usuario_menu(dados: dict):
     senha = input("Informe sua senha: ")
 
     print("\n--- Preferências de Comunicação ---")
-    print("1. Passo a passo curto e direto (Recomendado para TPAC)")
+    print("1. Passo a passo curto e direto")
     print("2. Detalhado e explicativo")
     pref = input("Opção: ").strip()
     estilo = "direto" if pref == "1" else "detalhado"
