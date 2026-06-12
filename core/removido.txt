@@ -1,0 +1,31 @@
+def obter_resposta_ia(pergunta: str, estilo_usuario: str) -> list:
+    """
+    Simula ou conecta à API de IA. Retorna uma lista de strings 
+    garantindo que o output seja focado, direto e sem ambiguidades.
+    """
+    # Se integrado à API real, o prompt exigiria respostas no formato abaixo
+    if estilo_usuario == "direto":
+        return [
+            "Ação 1: Foque apenas no comando central.",
+            "Ação 2: Reduza ruídos externos antes de iniciar.",
+            "Ação 3: Faça uma pausa silenciosa de 5 minutos ao terminar."
+        ]
+    else:
+        return [
+            "Explicação: Para resolver esse problema, precisamos segmentar os estímulos.",
+            "Passo Recomendado: Comece organizando visualmente seu caderno de estudos.",
+            "Dica: O cansaço auditivo pode ser mitigado fragmentando o tempo de leitura."
+        ]
+
+
+
+def gerar_passos_tarefa(titulo_tarefa: str) -> list:
+    """
+    Quebra tarefas complexas em subtarefas visuais sequenciais
+    """
+    return [
+        "Organizar o espaço de trabalho retirando distrações visuais.",
+        "Executar a primeira metade da atividade por 15 minutos.",
+        "Fazer uma pausa de 5 minutos em silêncio absoluto."
+    ]
+

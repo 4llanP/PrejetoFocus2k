@@ -1,33 +1,7 @@
-def obter_resposta_ia(pergunta: str, estilo_usuario: str) -> list:
-    """
-    Simula ou conecta à API de IA. Retorna uma lista de strings 
-    garantindo que o output seja focado, direto e sem ambiguidades.
-    """
-    # Se integrado à API real, o prompt exigiria respostas no formato abaixo
-    if estilo_usuario == "direto":
-        return [
-            "Ação 1: Foque apenas no comando central.",
-            "Ação 2: Reduza ruídos externos antes de iniciar.",
-            "Ação 3: Faça uma pausa silenciosa de 5 minutos ao terminar."
-        ]
-    else:
-        return [
-            "Explicação: Para resolver esse problema, precisamos segmentar os estímulos.",
-            "Passo Recomendado: Comece organizando visualmente seu caderno de estudos.",
-            "Dica: O cansaço auditivo pode ser mitigado fragmentando o tempo de leitura."
-        ]
+"""Serviço de integração com a API Gemini para recursos de IA."""
 
-def gerar_passos_tarefa(titulo_tarefa: str) -> list:
-    """Quebra tarefas complexas em subtarefas visuais sequenciais."""
-    return [
-        "Organizar o espaço de trabalho retirando distrações visuais.",
-        "Executar a primeira metade da atividade por 15 minutos.",
-        "Fazer uma pausa de 5 minutos em silêncio absoluto."
-    ]
-
-
-# -------------------------------------------------------------------------------
-
+# pylint: disable=line-too-long
+# pylint: disable=astroid-error
 import os
 from google import genai
 from google.genai import types
@@ -48,12 +22,12 @@ def _obter_instrucao_tpac(estilo_usuario: str) -> str:
         "- Divida as respostas visualmente usando tópicos/bullets claros.\n"
         "não use formatação de texto como bold, italico, hyperlink\n"
     )
-  
+
     if estilo_usuario == "direto":
         base_prompt += "- Seja extremamente conciso. Vá direto ao ponto, use o mínimo de palavras possível."
     else:
         base_prompt += "- Se precisar explicar um conceito, faça-o em etapas lógicas e sequenciais simples."
-      
+
     return base_prompt
 def obter_resposta_ia(pergunta: str, estilo_usuario: str) -> list:
     """Conecta ao Gemini para responder dúvidas gerais de estudos ou organização."""
@@ -69,10 +43,10 @@ def obter_resposta_ia(pergunta: str, estilo_usuario: str) -> list:
                 temperature=0.3, # Baixa temperatura para manter a resposta factual e focada
             ),
         )
-      
+
         # Divide a resposta por linhas para bater com a estrutura de exibição da UI do terminal
         return [linha.strip() for linha in response.text.split("\n") if linha.strip()]
-    except Exception as e:
+    except (ConnectionError, TimeoutError) as e:
         return [f"Erro ao nos comunicarmos com a IA: {str(e)}"]
 def gerar_passos_tarefa(titulo_tarefa: str) -> list:
     """Usa o Gemini para quebrar uma tarefa macro em micro-ações sequenciais."""
@@ -83,7 +57,7 @@ def gerar_passos_tarefa(titulo_tarefa: str) -> list:
         f"curtos e fáceis de focar: '{titulo_tarefa}'. "
         f"Escreva apenas os passos, um por linha, sem introduções ou numeração manual."
     )
-  
+
     system_instruction = (
         "Você é um especialista em produtividade para neurodivergentes. "
         "Crie checklists limpos, com verbos de ação claros e livres de poluição textual."
@@ -97,17 +71,16 @@ def gerar_passos_tarefa(titulo_tarefa: str) -> list:
                 temperature=0.2,
             ),
         )
-      
+
         # Limpa e filtra linhas vazias
         passos = [linha.strip() for linha in response.text.split("\n") if linha.strip()]
-      
+
         # Remove marcadores comuns caso o modelo acabe gerando por teimosia (ex: "-", "*", "1.")
         passos_limpos = []
         for p in passos:
             p_limpo = p.lstrip("0123456789.-* ")
             if p_limpo:
                 passos_limpos.append(p_limpo)
-              
         return passos_limpos
-    except Exception as e:
+    except (ConnectionError, TimeoutError) as e:
         return [f"Não foi possível gerar os passos: {str(e)}"]

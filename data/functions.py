@@ -1,17 +1,12 @@
-def autenticar_usuario(dados: dict, nome: str) -> bool:
+"""Funções auxiliares relacionadas aos usuários."""
+
+def autenticar_usuario(dados: dict, nome: str, senha: str) -> bool:
+    """
+    Verifica se a senha informada pertence ao usuário.
+    """
     if nome not in dados:
         return False
 
     senha_correta = dados[nome].get("senha", "")
 
-    while True:
-        senha = input("Digite a senha: ")
-
-        if senha == senha_correta:
-            return True
-
-        print("\nSenha incorreta.")
-        opcao = input("1. Tentar novamente\n2. Voltar\nEscolha: ").strip()
-
-        if opcao == "2":
-            return False
+    return senha == senha_correta

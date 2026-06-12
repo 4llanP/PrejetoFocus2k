@@ -1,3 +1,4 @@
+"""Gerenciamento de dados do sistema usando MySQL."""
 import os
 from typing import Dict, Any
 
@@ -8,22 +9,15 @@ load_dotenv()
 
 def conectar():
     """
-    Abre uma conexão com o banco MySQL.
-
-    Antes de executar o sistema, confira o arquivo .env:
-    DB_HOST=localhost
-    DB_USER=root
-    DB_PASSWORD=sua_senha
-    DB_NAME=tpac_db
+    Cria e retorna uma conexão com o banco MySQL.
     """
     return mysql.connector.connect(
-        host=os.getenv("DB_HOST", "localhost"),
-        user=os.getenv("DB_USER", "root"),
-        password=os.getenv("DB_PASSWORD", "Senac2026"),
-        database=os.getenv("DB_NAME", "tpac_db"),
-        port=int(os.getenv("DB_PORT", "3306"))
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME"),
+        port=int(os.getenv("DB_PORT"))
     )
-
 
 def carregar_dados() -> Dict[str, Any]:
     """
@@ -45,9 +39,9 @@ def carregar_dados() -> Dict[str, Any]:
     cursor = conexao.cursor(dictionary=True)
 
     cursor.execute("""
-        SELECT id, nome, estilo_instrucao
-        FROM usuarios
-        ORDER BY nome
+    SELECT id, nome, senha, estilo_instrucao
+    FROM usuarios
+    ORDER BY nome
     """)
     usuarios = cursor.fetchall()
 
@@ -55,6 +49,7 @@ def carregar_dados() -> Dict[str, Any]:
         nome = usuario["nome"]
 
         dados[nome] = {
+            "senha": usuario["senha"],
             "preferencias": {
                 "estilo_instrucao": usuario["estilo_instrucao"]
             },
@@ -123,7 +118,7 @@ def salvar_dados(dados: Dict[str, Any]) -> None:
         for nome, info_usuario in dados.items():
             estilo = info_usuario.get("preferencias", {}).get("estilo_instrucao", "direto")
             senha = info_usuario.get("senha", "")
-            
+
             cursor.execute("""
             INSERT INTO usuarios (nome, senha, estilo_instrucao)
             VALUES (%s, %s, %s)

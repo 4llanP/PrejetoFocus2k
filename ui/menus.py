@@ -1,9 +1,12 @@
+"""Menus de interação do sistema Focus 2k."""
+
 from ui.utils import exibir_cabecalho
-from data.data_manager import carregar_dados, salvar_dados
+from data.data_manager import salvar_dados #, carregar_dados
 import core.tarefas as core_tarefas
 import core.ia_service as ia_service
 
 def criar_usuario_menu(dados: dict):
+    """Cria um novo usuário no sistema."""
     exibir_cabecalho("CRIAR PERFIL")
     nome = input("Digite o nome do usuário: ").strip()
     if not nome or nome in dados:
@@ -28,10 +31,15 @@ def criar_usuario_menu(dados: dict):
     input(f"\nPerfil {nome} criado! Pressione Enter.")
 
 def gerenciar_tarefas_menu(dados: dict, usuario: str, chave: str, titulo: str):
+    """
+    Exibe e gerencia tarefas do usuário.
+
+    Permite criar tarefas, alterar status e gerar passos usando IA.
+    """
     while True:
         exibir_cabecalho(titulo)
         tarefas = dados[usuario][chave]
-        
+
         if not tarefas:
             print("[Nenhuma tarefa pendente.]")
         else:
@@ -47,26 +55,31 @@ def gerenciar_tarefas_menu(dados: dict, usuario: str, chave: str, titulo: str):
 
         if opcao == "1":
             t_nome = input("Nome da tarefa: ").strip()
-            if t_nome: core_ref = core_tarefas.adicionar_tarefa(dados, usuario, chave, t_nome)
+            if t_nome:
+                core_tarefas.adicionar_tarefa(dados, usuario, chave, t_nome)
         elif opcao == "2" and tarefas:
             try:
                 idx = int(input("Número da tarefa: ")) - 1
                 core_tarefas.alternar_status_tarefa(dados, usuario, chave, idx)
-            except ValueError: pass
+            except ValueError:
+                pass
         elif opcao == "3" and tarefas:
             try:
                 idx = int(input("Número da tarefa para IA tratar: ")) - 1
                 if 0 <= idx < len(tarefas):
                     passos = ia_service.gerar_passos_tarefa(tarefas[idx]["titulo"])
                     print("\n🤖 Passos sugeridos pela IA:")
-                    for i, p in enumerate(passos, 1): print(f"  {i}. {p}")
+                    for i, p in enumerate(passos, 1):
+                        print(f"  {i}. {p}")
                     if input("\nAceitar sugestão? (s/n): ").lower() == 's':
                         core_tarefas.injetar_passos_ia(dados, usuario, chave, idx, passos)
-            except ValueError: pass
+            except ValueError:
+                pass
         elif opcao == "4":
             break
 
 def painel_ia_menu(dados: dict, usuario: str):
+    """Abre o painel de interação com a IA."""
     exibir_cabecalho("ASSISTENTE DE IA PARA TPAC")
     print("Peça ajuda para simplificar enunciados, organizar rotinas ou tirar dúvidas.")
     print("Digite 'sair' para retornar.\n")
@@ -74,8 +87,10 @@ def painel_ia_menu(dados: dict, usuario: str):
 
     while True:
         pergunta = input("\nVocê: ").strip()
-        if pergunta.lower() == 'sair': break
-        if not pergunta: continue
+        if pergunta.lower() == 'sair':
+            break
+        if not pergunta:
+            continue
 
         print("\n🤖 Processando sem ambiguidades...")
         respostas = ia_service.obter_resposta_ia(pergunta, estilo)
@@ -85,6 +100,7 @@ def painel_ia_menu(dados: dict, usuario: str):
         print("-" * 30)
 
 def painel_principal_menu(dados: dict, usuario: str):
+    """Exibe o menu principal do usuário."""
     while True:
         exibir_cabecalho(f"PAINEL DO USUÁRIO: {usuario}")
         print("1. Atividades Diárias\n2. Central de IA\n3. Logout")
