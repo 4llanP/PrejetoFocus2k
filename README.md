@@ -5,4 +5,4 @@ Site de manipulação de tarefas na técnica `kanban`, junto ira ter sistema pom
 Usados:`JS, HTML, CSS, Python, Supabase, VSCODE`
 
 Projeto integrador do `programa Jovem Programador` do instituto `Senac Palhoça`
-> Grupo: Allan Tavares, Naielly Alves, Juan Camilo, Raiane Rosar
+> Grupo: Allan Tavares, Naielly Alves, Juan Camilo, Raiane Rosar, Nicolli Santos
